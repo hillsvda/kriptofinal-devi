@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="tr" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kripto Operasyon Merkezi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background: linear-gradient(135deg, #1a0036 0%, #2d0066 40%, #00eaff 100%), url('https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+            background-blend-mode: screen;
+            background-size: cover;
+            color: #f3eaff;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            position: relative;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 25, 47, 0.85);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .container {
+            max-width: 900px;
+            margin-top: 50px;
+            position: relative;
+            z-index: 1;
+        }
+        .tab-btn {
+            background: linear-gradient(135deg, #00eaff 0%, #1de9ff 100%);
+            border: none;
+            color: #0a192f;
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 18px 48px;
+            margin: 0 18px;
+            border-radius: 18px 18px 0 0;
+            box-shadow: 0 4px 24px #00eaff55;
+            border-bottom: 4px solid transparent;
+            transition: all 0.25s;
+            letter-spacing: 1px;
+            outline: none;
+            position: relative;
+            z-index: 2;
+        }
+        .tab-btn.active, .tab-btn:focus {
+            color: #fff;
+            background: linear-gradient(135deg, #1de9ff 0%, #00eaff 100%);
+            border-bottom: 4px solid #fff;
+            box-shadow: 0 8px 32px #00eaffcc, 0 2px 0 #fff inset;
+            transform: scale(1.08);
+        }
+        .tab-btn:hover {
+            color: #fff;
+            background: linear-gradient(135deg, #1de9ff 0%, #00eaff 100%);
+            box-shadow: 0 8px 32px #00eaffcc;
+        }
+        .card {
+            background: rgba(34, 0, 51, 0.92);
+            border: 1.5px solid #a259f7;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 24px 0 #a259f799, 0 1.5px 6px #00eaff33;
+            backdrop-filter: blur(2px);
+            border-radius: 18px;
+            transition: box-shadow 0.25s, transform 0.25s;
+        }
+        .card:hover {
+            box-shadow: 0 8px 40px 0 #00eaffcc, 0 2px 8px #a259f7cc;
+            transform: scale(1.025);
+        }
+        .card-header {
+            background: rgba(26, 0, 54, 0.98);
+            border-bottom: 1.5px solid #a259f7;
+            color: #f3eaff;
+            text-shadow: 0 0 8px #a259f7;
+        }
+        .form-control {
+            background: rgba(26, 0, 54, 0.95);
+            border: 1.5px solid #a259f7;
+            color: #f3eaff;
+            text-shadow: 0 0 4px #a259f7;
+            border-radius: 10px;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+        .form-control:focus {
+            background: rgba(34, 0, 51, 1);
+            border-color: #00eaff;
+            color: #fff;
+            box-shadow: 0 0 0 3px #00eaff55, 0 0 10px #a259f7;
+        }
+        .neon-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #00eaff 0%, #1de9ff 100%);
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 0 24px 4px #00eaff99, 0 0 0 4px #0a192f inset;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            transition: box-shadow 0.2s, transform 0.2s;
+            outline: none;
+            position: relative;
+        }
+        .neon-btn:hover, .neon-btn:focus {
+            box-shadow: 0 0 40px 8px #1de9ffcc, 0 0 0 6px #0a192f inset;
+            background: linear-gradient(135deg, #1de9ff 0%, #00eaff 100%);
+            color: #fff;
+            transform: scale(1.08);
+        }
+        .neon-btn i {
+            font-size: 2rem;
+        }
+        .neon-label {
+            text-align: center;
+            color: #1de9ff;
+            font-size: 1rem;
+            margin-top: 8px;
+            text-shadow: 0 0 8px #00eaff;
+            letter-spacing: 1px;
+        }
+        .result-box {
+            background: rgba(26, 0, 54, 0.95);
+            border: 1.5px solid #00eaff;
+            padding: 15px;
+            margin-top: 15px;
+            word-break: break-all;
+            color: #fff;
+            text-shadow: 0 0 4px #a259f7;
+        }
+        .icon {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #5ea0ff;
+            text-shadow: 0 0 8px #22304a;
+        }
+        h1, .fs-5, .navbar-brand {
+            font-weight: bold !important;
+            letter-spacing: 1px;
+        }
+        .form-label {
+            text-shadow: 0 0 4px #3a5ca8;
+            color: #eaf6ff;
+        }
+        @keyframes glow {
+            0% { text-shadow: 0 0 4px #5ea0ff; }
+            50% { text-shadow: 0 0 16px #5ea0ff; }
+            100% { text-shadow: 0 0 4px #5ea0ff; }
+        }
+        .card-header h5 {
+            animation: glow 2s infinite;
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a192f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3a5ca8;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5ea0ff;
+        }
+        .material-card {
+            border-radius: 18px;
+            box-shadow: 0 8px 32px #00eaff33, 0 1.5px 6px #22304a44;
+            border: none;
+        }
+        .loading-btn .spinner-border {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .loading-btn.loading .btn-text {
+            opacity: 0.3;
+        }
+        .loading-btn.loading .spinner-border {
+            display: inline-block !important;
+        }
+        .dropzone {
+            border: 2px dashed #a259f7;
+            border-radius: 16px;
+            background: rgba(26, 0, 54, 0.7);
+            color: #a259f7;
+            font-size: 1.1rem;
+            padding: 36px 0;
+            cursor: pointer;
+            transition: background 0.2s, border 0.2s;
+            margin-bottom: 10px;
+        }
+        .dropzone.dragover {
+            background: rgba(0, 234, 255, 0.15);
+            border-color: #00eaff;
+            color: #00eaff;
+        }
+        .navbar {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 2px 12px #a259f7;
+            background: linear-gradient(90deg, #1a0036 0%, #a259f7 60%, #00eaff 100%) !important;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.35rem;
+            letter-spacing: 1px;
+            color: #fff !important;
+        }
+        .nav-link {
+            color: #f3eaff !important;
+            font-size: 1.08rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: color 0.2s, background 0.2s;
+            border-radius: 8px;
+            padding: 8px 18px !important;
+        }
+        .nav-link.active, .nav-link:focus {
+            color: #fff !important;
+            background: #a259f733;
+        }
+        .nav-link:hover {
+            color: #00eaff !important;
+            background: #a259f744;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow" style="background: linear-gradient(90deg, #0a192f 0%, #1de9ff 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 2px 12px #00eaff55;">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold fs-5" href="#top" style="font-size:1.35rem; letter-spacing:1px;"> <i class="fas fa-user-secret"></i> AES & RSA Şifreleme</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="#top">Ana Sayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#aesSection">AES</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#rsaSection">RSA</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#shaSection">SHA256</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="padding-top: 80px;">
+        <h1 class="text-center mb-2">
+            <i class="fas fa-user-secret icon"></i>
+            AES ve RSA Şifreleme
+        </h1>
+        <p class="text-center mb-4" style="color:#1de9ff; font-size:1.15rem; font-weight:500;">
+            Lütfen bir şifreleme yöntemi seçin: <b>AES</b> veya <b>RSA</b> ile şifreleme ve çözme işlemleri yapabilirsiniz.
+        </p>
+        <div class="text-center mb-4">
+            <label for="algoSelect" style="color:#1de9ff;font-weight:600;font-size:1.1rem;">Şifreleme Yöntemi:</label>
+            <select id="algoSelect" class="form-select d-inline-block w-auto ms-2" style="max-width:180px;display:inline-block;">
+                <option value="rsa">RSA</option>
+                <option value="aes">AES</option>
+            </select>
+        </div>
+        <div id="aesSection" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-lock icon"></i> AES Şifreleme</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <label class="form-label">Şifrelenecek Metin:</label>
+                        <textarea class="form-control" id="encryptInputAES" rows="3"></textarea>
+                    </div>
+                    <button class="neon-btn" onclick="encryptAES()"><i class="fas fa-lock"></i></button>
+                    <div class="neon-label">Şifrele</div>
+                    <div class="result-box" id="encryptResultAES"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-unlock icon"></i> AES Şifre Çözme</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <label class="form-label">Şifreli Metin:</label>
+                        <textarea class="form-control" id="decryptInputAES" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">IV:</label>
+                        <input type="text" class="form-control" id="decryptIvAES">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Anahtar:</label>
+                        <input type="text" class="form-control" id="decryptKeyAES">
+                    </div>
+                    <button class="neon-btn" onclick="decryptAES()"><i class="fas fa-unlock"></i></button>
+                    <div class="neon-label">Şifre Çöz</div>
+                    <div class="result-box" id="decryptResultAES"></div>
+                </div>
+            </div>
+        </div>
+        <div id="rsaSection" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-key icon"></i> RSA Anahtar Üret</h5>
+                </div>
+                <div class="card-body text-center">
+                    <button class="neon-btn" onclick="generateRSAKeys()"><i class="fas fa-magic"></i></button>
+                    <div class="neon-label">Anahtar Üret</div>
+                    <div class="row mt-3">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Public Key</label>
+                            <textarea class="form-control" id="generatedPublicKey" rows="4" readonly></textarea>
+                            <button class="btn btn-sm btn-outline-info mt-2" onclick="copyToClipboard('generatedPublicKey')"><i class="fas fa-copy"></i> Kopyala</button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Private Key</label>
+                            <textarea class="form-control" id="generatedPrivateKey" rows="4" readonly></textarea>
+                            <button class="btn btn-sm btn-outline-info mt-2" onclick="copyToClipboard('generatedPrivateKey')"><i class="fas fa-copy"></i> Kopyala</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-lock icon"></i> RSA Şifreleme</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <label class="form-label">Şifrelenecek Metin:</label>
+                        <textarea class="form-control" id="encryptInputRSA" rows="3"></textarea>
+                    </div>
+                    <button class="neon-btn" onclick="encryptRSA()"><i class="fas fa-lock"></i></button>
+                    <div class="neon-label">Şifrele</div>
+                    <div class="result-box" id="encryptResultRSA"></div>
+                    <div id="rsaKeys" style="display:none; margin-top:10px;">
+                        <div><b>Public Key:</b> <span id="publicKey"></span></div>
+                        <div><b>Private Key:</b> <span id="privateKey"></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-unlock icon"></i> RSA Şifre Çözme</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <label class="form-label">Şifreli Metin:</label>
+                        <textarea class="form-control" id="decryptInputRSA" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Private Key:</label>
+                        <textarea class="form-control" id="decryptPrivateKeyRSA" rows="2"></textarea>
+                    </div>
+                    <button class="neon-btn" onclick="decryptRSA()"><i class="fas fa-unlock"></i></button>
+                    <div class="neon-label">Şifre Çöz</div>
+                    <div class="result-box" id="decryptResultRSA"></div>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5><i class="fas fa-file-upload icon"></i> RSA ile Dosya Şifrele</h5>
+                </div>
+                <div class="card-body text-center">
+                    <form id="rsaFileForm" enctype="multipart/form-data" onsubmit="return false;">
+                        <div class="mb-3">
+                            <input type="file" class="form-control" id="rsaFileInput" accept=".txt,.pdf,.docx">
+                            <small class="form-text text-info">Yalnızca küçük dosyalar (max 10KB): .txt, .pdf, .docx</small>
+                        </div>
+                        <button class="neon-btn" type="button" onclick="encryptRSAFile()"><i class="fas fa-lock"></i></button>
+                        <div class="neon-label">Dosyayı Şifrele</div>
+                    </form>
+                    <div class="result-box mt-3" id="rsaFileResult" style="display:none;"></div>
+                    <div class="row mt-2" id="rsaFileKeys" style="display:none;">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Public Key</label>
+                            <textarea class="form-control" id="rsaFilePublicKey" rows="3" readonly></textarea>
+                            <button class="btn btn-sm btn-outline-info mt-2" onclick="copyToClipboard('rsaFilePublicKey')"><i class="fas fa-copy"></i> Kopyala</button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Private Key</label>
+                            <textarea class="form-control" id="rsaFilePrivateKey" rows="3" readonly></textarea>
+                            <button class="btn btn-sm btn-outline-info mt-2" onclick="copyToClipboard('rsaFilePrivateKey')"><i class="fas fa-copy"></i> Kopyala</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" id="shaSection">
+            <div class="card-header">
+                <h5><i class="fas fa-fingerprint icon"></i> SHA256 Özet</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <label class="form-label">Özetlenecek Metin:</label>
+                    <textarea class="form-control" id="hashInput" rows="3"></textarea>
+                </div>
+                <button class="neon-btn" onclick="hash()"><i class="fas fa-fingerprint"></i></button>
+                <div class="neon-label">Özet Oluştur</div>
+                <div class="result-box" id="hashResult"></div>
+                <hr>
+                <div class="mb-3">
+                    <label class="form-label">Veya Dosya için Sürükle-Bırak:</label>
+                    <div id="dropzone" class="dropzone">Dosyayı buraya sürükleyin ya da tıklayın</div>
+                </div>
+                <div class="result-box" id="shaFileResult" style="display:none;"></div>
+                <button class="btn btn-outline-info mt-2 d-none" id="btnCopySHA" onclick="copyToClipboard('shaFileResultText')"><i class="fas fa-copy"></i> Kopyala</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('algoSelect').addEventListener('change', function() {
+            if (this.value === 'aes') {
+                document.getElementById('aesSection').style.display = '';
+                document.getElementById('rsaSection').style.display = 'none';
+            } else {
+                document.getElementById('aesSection').style.display = 'none';
+                document.getElementById('rsaSection').style.display = '';
+            }
+        });
+        window.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('algoSelect').dispatchEvent(new Event('change'));
+        });
+        async function encryptAES() {
+            const data = document.getElementById('encryptInputAES').value;
+            const response = await fetch('/encrypt_aes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data }),
+            });
+            const result = await response.json();
+            document.getElementById('encryptResultAES').innerHTML = 
+                `Şifreli Metin: ${result.encrypted_data}<br>IV: ${result.iv}<br>Anahtar: ${result.key}`;
+        }
+        async function decryptAES() {
+            const data = {
+                encrypted_data: document.getElementById('decryptInputAES').value,
+                iv: document.getElementById('decryptIvAES').value,
+                key: document.getElementById('decryptKeyAES').value
+            };
+            const response = await fetch('/decrypt_aes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            const result = await response.json();
+            document.getElementById('decryptResultAES').innerHTML = 
+                `Çözülmüş Metin: ${result.decrypted_data}`;
+        }
+        async function encryptRSA() {
+            const data = document.getElementById('encryptInputRSA').value;
+            const response = await fetch('/encrypt_rsa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data }),
+            });
+            const result = await response.json();
+            document.getElementById('encryptResultRSA').innerHTML = 
+                `Şifreli Metin: ${result.encrypted_data}`;
+            document.getElementById('rsaKeys').style.display = '';
+            document.getElementById('publicKey').textContent = result.public_key;
+            document.getElementById('privateKey').textContent = result.private_key;
+        }
+        async function decryptRSA() {
+            const data = {
+                encrypted_data: document.getElementById('decryptInputRSA').value,
+                private_key: document.getElementById('decryptPrivateKeyRSA').value
+            };
+            const response = await fetch('/decrypt_rsa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            const result = await response.json();
+            document.getElementById('decryptResultRSA').innerHTML = 
+                `Çözülmüş Metin: ${result.decrypted_data}`;
+        }
+        async function hash() {
+            const data = document.getElementById('hashInput').value;
+            const response = await fetch('/hash', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data }),
+            });
+            const result = await response.json();
+            document.getElementById('hashResult').innerHTML = 
+                `SHA256 Özet: ${result.hash}`;
+        }
+        async function generateRSAKeys() {
+            const response = await fetch('/generate_rsa_keys', { method: 'POST' });
+            const result = await response.json();
+            document.getElementById('generatedPublicKey').value = result.public_key;
+            document.getElementById('generatedPrivateKey').value = result.private_key;
+        }
+        function copyToClipboard(id) {
+            const textarea = document.getElementById(id);
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+        }
+        async function encryptRSAFile() {
+            const fileInput = document.getElementById('rsaFileInput');
+            const resultBox = document.getElementById('rsaFileResult');
+            const keysBox = document.getElementById('rsaFileKeys');
+            if (!fileInput.files[0]) {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = '<span style="color:#ff5252">Lütfen bir dosya seçin.</span>';
+                keysBox.style.display = 'none';
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = 'Şifreleniyor...';
+            keysBox.style.display = 'none';
+            const response = await fetch('/encrypt_rsa_file', {
+                method: 'POST',
+                body: formData
+            });
+            if (response.status !== 200) {
+                const err = await response.json();
+                resultBox.innerHTML = `<span style='color:#ff5252'>${err.error}</span>`;
+                return;
+            }
+            // Anahtarları headerdan al
+            const publicKey = response.headers.get('X-Public-Key');
+            const privateKey = response.headers.get('X-Private-Key');
+            // Dosya blob olarak indir
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            resultBox.innerHTML = `<a href="${url}" download="${fileInput.files[0].name}.enc" class="btn btn-success">Şifreli Dosyayı İndir</a>`;
+            document.getElementById('rsaFilePublicKey').value = publicKey;
+            document.getElementById('rsaFilePrivateKey').value = privateKey;
+            keysBox.style.display = '';
+        }
+        // SHA256 Sürükle Bırak
+        const dropzone = document.getElementById('dropzone');
+        const shaFileResult = document.getElementById('shaFileResult');
+        const btnCopySHA = document.getElementById('btnCopySHA');
+        dropzone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        });
+        dropzone.addEventListener('dragleave', function(e) {
+            dropzone.classList.remove('dragover');
+        });
+        dropzone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) handleSHAFile(file);
+        });
+        dropzone.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.onchange = e => {
+                if (e.target.files[0]) handleSHAFile(e.target.files[0]);
+            };
+            input.click();
+        });
+        async function handleSHAFile(file) {
+            shaFileResult.style.display = 'block';
+            shaFileResult.innerHTML = 'Hesaplanıyor...';
+            btnCopySHA.classList.add('d-none');
+            const arrayBuffer = await file.arrayBuffer();
+            const uint8 = new Uint8Array(arrayBuffer);
+            // SHA256 hesapla (tarayıcıda veya backend ile)
+            const hash = await sha256ArrayBuffer(uint8);
+            shaFileResult.innerHTML = `<span id='shaFileResultText' style='font-size:1.1rem;word-break:break-all;letter-spacing:1px;'>${hash.toUpperCase()}</span>`;
+            btnCopySHA.classList.remove('d-none');
+        }
+        async function sha256ArrayBuffer(uint8) {
+            if (window.crypto && window.crypto.subtle) {
+                const digest = await window.crypto.subtle.digest('SHA-256', uint8);
+                return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+            } else {
+                // Fallback: backend ile hesapla
+                const response = await fetch('/hash', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: btoa(String.fromCharCode(...uint8)) })
+                });
+                const result = await response.json();
+                return result.hash;
+            }
+        }
+    </script>
+</body>
+</html> 
